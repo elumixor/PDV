@@ -105,7 +105,7 @@ int main() {
         auto d = hanoi_domain<3, 1, 4>();
         auto root = d.get_root();
 
-//        evaluate(root, bfs);
+        evaluate(root, bfs);
         evaluate(root, iddfs);
     }
 //    {
