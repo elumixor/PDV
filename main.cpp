@@ -102,11 +102,14 @@ int main() {
     //
     // POZOR! Rozmery bludiste musi byt licha cisla!
     {
-        auto d = hanoi_domain<3, 1, 4>();
+        std::cout << sizeof(char) << std::endl;
+
+
+        auto d = hanoi_domain<7, 1, 5>();
         auto root = d.get_root();
 
         evaluate(root, bfs);
-        evaluate(root, iddfs);
+//        evaluate(root, iddfs);
     }
 //    {
 //        auto d = sat_domain<30,7,3,1,true>();
