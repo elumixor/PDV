@@ -1,15 +1,52 @@
 #include "iddfs.h"
+#include <set>
+#include <queue>
+#include <iostream>
+#include <map>
+#include <unordered_set>
+#include <atomic>
+#include <mutex>
+#include <functional>
 
-// Naimplementujte efektivni algoritmus pro nalezeni nejkratsi (respektive nej-
-// levnejsi) cesty v grafu. V teto metode mate ze ukol naimplementovat pametove
-// efektivni algoritmus pro prohledavani velkeho stavoveho prostoru. Pocitejte
-// s tim, ze Vami navrzeny algoritmus muze bezet na stroji s omezenym mnozstvim
-// pameti (radove nizke stovky megabytu). Vhodnym pristupem tak muze byt napr.
-// iterative-deepening depth-first search.
-//
-// Metoda ma za ukol vratit ukazatel na cilovy stav, ktery je dosazitelny pomoci
-// nejkratsi/nejlevnejsi cesty. Pokud je nejkratsich cest vice, vratte ukazatel
-// na stav s nejnizsim identifikatorem (viz methoda 'state::get_identifier()').
+typedef unsigned long long t_id;
+typedef std::shared_ptr<const state> t_ptr;
+#define val const auto &
+
+#define id(node) node->get_identifier()
+#define not_visited(node) visited.find(id(node)) == end
+
 std::shared_ptr<const state> iddfs(std::shared_ptr<const state> root) {
-    return root;
+    std::unordered_set<t_id> visited{};
+    val end = visited.end();
+
+    std::function<t_ptr(t_ptr, unsigned)> DLS = [&](t_ptr src, unsigned limit) -> t_ptr {
+        if (src->is_goal())
+            return src;
+
+        if (limit <= 0)
+            return nullptr;
+
+        for (val child : src->next_states()) {
+            if (!(not_visited(child))) continue;
+
+            visited.insert(id(child));
+
+            val result = DLS(child, limit - 1);
+            if (result != nullptr)
+                return result;
+        }
+
+        return nullptr;
+    };
+
+    for (auto i = 0u; i < 100; ++i) {
+        visited.clear();
+
+        val result = DLS(root, i);
+        if (result != nullptr)
+            return result;
+    }
+
+    return nullptr;
 }
+
