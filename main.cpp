@@ -107,18 +107,18 @@ int main() {
 
         evaluate(root, bfs);
     }
-    {
-        auto d = sat_domain<30,7,3,1,true>();
-        auto root = d.get_root();
-
-        evaluate(root, bfs);
-    }
-    {
-        auto d = maze_domain<31, 21, 0, false>();
-        auto root = d.get_root();
-
-        evaluate(root, bfs);
-    }
+//    {
+//        auto d = sat_domain<30,7,3,1,true>();
+//        auto root = d.get_root();
+//
+//        evaluate(root, bfs);
+//    }
+//    {
+//        auto d = maze_domain<31, 21, 0, false>();
+//        auto root = d.get_root();
+//
+//        evaluate(root, bfs);
+//    }
 //    evaluate(root, iddfs);
 
     return 0;
