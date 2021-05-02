@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.5.1)
 project(PDV_Search)
 
+set(CMAKE_C_COMPILER /usr/local/binc/gcc-10)
+set(CMAKE_CXX_COMPILER /usr/local/bin/g++-10)
+
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native -fopenmp -O3")
 

@@ -102,21 +102,18 @@ int main() {
     //
     // POZOR! Rozmery bludiste musi byt licha cisla!
     {
-        std::cout << sizeof(char) << std::endl;
+//        auto d = hanoi_domain<7, 1, 6>();
+//        auto root = d.get_root();
 
-
-        auto d = hanoi_domain<7, 1, 5>();
+//        evaluate(root, bfs);
+//        evaluate(root, iddfs);
+    }
+    {
+        auto d = sat_domain<20,5,3,1,true>();
         auto root = d.get_root();
 
         evaluate(root, bfs);
-//        evaluate(root, iddfs);
     }
-//    {
-//        auto d = sat_domain<30,7,3,1,true>();
-//        auto root = d.get_root();
-//
-//        evaluate(root, bfs);
-//    }
 //    {
 //        auto d = maze_domain<31, 21, 0, false>();
 //        auto root = d.get_root();

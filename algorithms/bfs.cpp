@@ -6,7 +6,6 @@
 #include <unordered_set>
 #include <atomic>
 #include <mutex>
-#include <omp.h>
 
 typedef unsigned long long t_id;
 typedef std::shared_ptr<const state> t_ptr;
@@ -88,7 +87,14 @@ public:
         return result;
     }
 
-    // TODO: destructor
+    ~Queue() {
+        Node *current = head;
+        while (current != nullptr) {
+            Node *next = current->next;
+            delete current;
+            current = next;
+        }
+    }
 };
 
 template<typename T>
@@ -97,19 +103,23 @@ class Stack {
     public:
         std::atomic<Node *> next{nullptr};
         T item;
-        explicit Node(T item) : item{item} {}
+        explicit Node(T item) : item{std::move(item)} {}
     };
+
+    std::atomic<t_id> size{0ull};
 
     Node *head{new Node(T())};
 public:
     void push(T item) {
-        Node *node = new Node(item);
+        Node *node = new Node(std::move(item));
         Node *previous;
 
         do {
             previous = head->next;
             node->next = previous;
         } while (!head->next.compare_exchange_strong(previous, node));
+
+        size++;
     }
 
     bool contains(const T &item) const {
@@ -132,11 +142,41 @@ public:
         }
     }
 
-    // TODO: destructor
+    ~Stack() {
+        Node *current = head;
+        while (current != nullptr) {
+            Node *next = current->next;
+            delete current;
+            current = next;
+        }
+    }
+};
+
+class Set {
+    Stack<t_id> *buckets;
+    t_id num_buckets;
+    t_id bitmap{1 << 20};
+
+public:
+    explicit Set(unsigned num_buckets) : num_buckets{num_buckets} {
+        buckets = new Stack<t_id>[num_buckets];
+    }
+
+    void push(t_id item) {
+        buckets[(item % num_buckets)].push(item);
+    }
+
+    bool contains(t_id item) {
+        return buckets[item % num_buckets].contains(item);
+    }
+
+    ~Set() {
+        delete[] buckets;
+    }
 };
 
 t_ptr bfs(t_ptr root) {
-    Stack<t_id> visited;
+    Set visited(100);
     visited.push(id(root));
 
     Queue<t_ptr> queue;
