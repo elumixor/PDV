@@ -31,7 +31,7 @@ auto join(R1<R2<T, A2...>, A1...> const &outer) {
 t_ptr bfs(t_ptr root) {
     if (root->is_goal()) return root;
 
-    std::vector<t_ptr> current = std::move(root->next_states());
+    std::vector<t_ptr> current = root->next_states();
 
     std::unordered_set<t_id> visited;
 
@@ -44,20 +44,20 @@ t_ptr bfs(t_ptr root) {
 
 #pragma omp parallel for default(none) shared(size, current, found, visited, next) schedule(static, 8)
         for (auto i = 0u; i < size; ++i) {
-            val child = current[i];
-            if (child->is_goal()) {
-                found = child;
-                continue;
-            }
+                val child = current[i];
+                if (child->is_goal()) {
+                    found = child;
+                    continue;
+                }
 
-            t_id id{child->get_identifier()};
+                t_id id{child->get_identifier()};
 
-            if (visited.find(id) != visited.end()) continue;
+                if (visited.find(id) != visited.end()) continue;
 
-            // this may be expensive as well
-            visited.insert(id);
+                // this may be expensive as well
+                visited.insert(id);
 
-            next[i] = std::move(child->next_states());
+                next[i] = child->next_states();
         }
 
         if (found != nullptr) return found;

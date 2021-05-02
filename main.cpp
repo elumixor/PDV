@@ -101,21 +101,22 @@ int main() {
     // nebude uniformni.
     //
     // POZOR! Rozmery bludiste musi byt licha cisla!
-//    {
-//        auto d = hanoi_domain<3, 1, 4>();
-//        auto root = d.get_root();
-//
-//        evaluate(root, bfs);
-////        evaluate(root, iddfs);
-//    }
     {
-        printf("%lu\n", sizeof(unsigned long long));
-        printf("%lu\n", sizeof(double));
+//        auto d = hanoi_domain<7, 1, 5>();
+//        auto root = d.get_root();
 
-        auto d = sat_domain<30,7,3,1,true>();
+//        evaluate(root, bfs);
+//        evaluate(root, iddfs);
+    }
+    {
+//        printf("%lu\n", sizeof(unsigned long long));
+//        printf("%lu\n", sizeof(double));
+
+        auto d = sat_domain<20,5,3,1,true>();
         auto root = d.get_root();
 
         evaluate(root, bfs);
+        evaluate(root, iddfs);
     }
 //    {
 //        auto d = maze_domain<31, 21, 0, false>();
